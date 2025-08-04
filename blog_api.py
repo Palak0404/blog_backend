@@ -35,23 +35,23 @@ def generate_blog():
 
     # Unified, structured yet human-toned prompt
     prompt = f"""
-You are an expert SEO blog writer. Your job is to write a human-like blog on the topic below for an 8th-grade reading level.
+Write at a 5th grade level. Use clear, simple language and natural phrasing — like how people talk in everyday conversation. Keep the words easy, the tone chill, and the vibe friendly.
 
 ## Writing Style:
-- Make it sound personal, casual, and engaging — like a real person talking.
-- Use short paragraphs, natural pacing, and real-world examples.
+- Make it personal, casual, and engaging — like a real person talking.
+- Use paragraphs, natural pacing, and real-world examples.
 - Use simple language and avoid technical jargon.
-- Add human touches: phrases like “Let’s be real…”, “Honestly…”, “Here’s the thing…”.
+- Add human touches like relateable and conversational phrases.
 
-## Structure (Do not skip):
-1. A short, relatable 2–3 sentence introduction.
+## Structure :
+1. A short, relatable 2-3 sentence introduction.
 2. A catchy H1 title using #
-3. A Markdown-formatted Table of Contents with 4–6 H2 sections (##), numbered.
+3. A Markdown-formatted Table of Contents with 4-6 H2 sections (##), numbered.
 4. Each H2 section should contain:
-   - Two subpoints using ### with ~150–200 words total.
+   - Two subpoints using ### with ~150-200 words total.
 5. A ## Frequently Asked Questions section:
-   - 4 common questions with short, helpful 2–3 sentence answers.
-6. A ## Conclusion (2–3 sentences to wrap up).
+   - 4 common questions with short, helpful 2-3 sentence answers.
+6. A ## Conclusion (2-3 sentences to wrap up).
 
 ## Format:
 Use proper Markdown. Output only the blog — no extra explanations.
@@ -89,8 +89,8 @@ Use proper Markdown. Output only the blog — no extra explanations.
                     {
                         "role": "system",
                         "content": (
-                            "You're a human-like SEO blog writer. You follow a clear blog structure with TOC, FAQs, and Conclusion. "
-                            "Your tone is friendly, casual, and conversational — written for 8th-grade readers. "
+                            "You're a comman human . You follow a clear blog structure with TOC, FAQs, and Conclusion. "
+                            "Your tone is friendly, casual, and conversational — written for 5th-grade readers. "
                             "Avoid robotic, generic, or overly formal writing."
                         )
                     },
