@@ -23,42 +23,47 @@ client = AzureOpenAI(
 @app.route('/generate_blog', methods=['POST'])
 def generate_blog():
     data = request.get_json(force=True)
+    data.pop("prompt", None)  # Remove custom prompt if passed accidentally
+
+    model_choice = data.get("model", "gemini").lower()
     topic = data.get("topic", "").strip()
-    model_choice = data.get("model", "gemini").lower()  # default: gemini
 
     print(f">>> Request received — Model: {model_choice}, Topic: {topic}")
 
     if not topic:
         return jsonify({"error": "Missing or empty topic"}), 400
 
+    # Unified, structured yet human-toned prompt
     prompt = f"""
-    You are an expert SEO blog writer. Follow my instructions **exactly**.
+You are an expert SEO blog writer. Your job is to write a human-like blog on the topic below for an 8th-grade reading level.
 
-    ## Instructions:
-    1. Start with a 2–3 sentence introduction to the blog topic.
-    2. Use one main H1 title using `#`.
-    3. Create a Table of Contents using 4–6 H2 sections (numbered, Markdown format).
-    4. Then expand each of those `##` H2s with:
-    - 2 `###` H3s inside each
-    - ~150–200 words per H2 section total
-    5. Add a `## Frequently Asked Questions` section at the end:
-    - Include **4 related questions**, with **short 2–3 sentence answers**.
-    6. Add a `## Conclusion` (2–3 sentences to wrap up).
+## Writing Style:
+- Make it sound personal, casual, and engaging — like a real person talking.
+- Use short paragraphs, natural pacing, and real-world examples.
+- Use simple language and avoid technical jargon.
+- Add human touches: phrases like “Let’s be real…”, “Honestly…”, “Here’s the thing…”.
 
-    ## Formatting Rules:
-    - Use Markdown formatting
-    - DO NOT skip any section
-    - DO NOT write explanation or extra text — only output the blog
+## Structure (Do not skip):
+1. A short, relatable 2–3 sentence introduction.
+2. A catchy H1 title using #
+3. A Markdown-formatted Table of Contents with 4–6 H2 sections (##), numbered.
+4. Each H2 section should contain:
+   - Two subpoints using ### with ~150–200 words total.
+5. A ## Frequently Asked Questions section:
+   - 4 common questions with short, helpful 2–3 sentence answers.
+6. A ## Conclusion (2–3 sentences to wrap up).
 
-    ## Topic:  
-    **{topic}**
-    """
+## Format:
+Use proper Markdown. Output only the blog — no extra explanations.
+
+## Topic:
+{topic}
+"""
 
     try:
         if model_choice == "gemini":
-            print("⚡ Using Gemini model")
+            print("Using Gemini model")
             model = genai.GenerativeModel("models/gemini-2.0-flash")
-
             stream = model.generate_content(
                 prompt,
                 stream=True,
@@ -76,13 +81,23 @@ def generate_blog():
                     full_blog += chunk.text
 
         elif model_choice == "gpt-4o-azure":
-            print("⚡ Using Azure GPT-4o model")
+            print("Using Azure GPT-4o model")
 
             response = client.chat.completions.create(
                 model=AZURE_DEPLOYMENT,
                 messages=[
-                    {"role": "system", "content": "You are an expert SEO blog writer."},
-                    {"role": "user", "content": prompt}
+                    {
+                        "role": "system",
+                        "content": (
+                            "You're a human-like SEO blog writer. You follow a clear blog structure with TOC, FAQs, and Conclusion. "
+                            "Your tone is friendly, casual, and conversational — written for 8th-grade readers. "
+                            "Avoid robotic, generic, or overly formal writing."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
                 ],
                 temperature=0.9,
                 top_p=0.95,
@@ -97,9 +112,8 @@ def generate_blog():
         return jsonify({"blog": full_blog})
 
     except Exception as e:
-        print("❌ Error:", str(e))
+        print("Error:", str(e))
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
