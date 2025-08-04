@@ -35,29 +35,9 @@ def generate_blog():
 
     # Unified, structured yet human-toned prompt
     prompt = f"""
-Write at a 5th grade level. Use clear, simple language and natural phrasing — like how people talk in everyday conversation. Keep the words easy, the tone chill, and the vibe friendly.
-
-## Writing Style:
-- Make it personal, casual, and engaging — like a real person talking.
-- Use paragraphs, natural pacing, and real-world examples.
-- Use simple language and avoid technical jargon.
-- Add human touches like relateable and conversational phrases.
-
-## Structure :
-1. A short, relatable 2-3 sentence introduction.
-2. A catchy H1 title using #
-3. A Markdown-formatted Table of Contents with 4-6 H2 sections (##), numbered.
-4. Each H2 section should contain:
-   - Two subpoints using ### with ~150-200 words total.
-5. A ## Frequently Asked Questions section:
-   - 4 common questions with short, helpful 2-3 sentence answers.
-6. A ## Conclusion (2-3 sentences to wrap up).
-
-## Format:
-Use proper Markdown. Output only the blog — no extra explanations.
-
-## Topic:
-{topic}
+Write a friendly, casual blog post on the topic: "{topic}".  
+Keep it clear, human-like, and simple — like you’re talking to a 5th grader.  
+Use markdown formatting: H1 title, TOC (with H2), H3 subheadings, FAQs, and a short conclusion.
 """
 
     try:
@@ -89,7 +69,7 @@ Use proper Markdown. Output only the blog — no extra explanations.
                     {
                         "role": "system",
                         "content": (
-                            "You're a comman human . You follow a clear blog structure with TOC, FAQs, and Conclusion. "
+                            "You're a person who  follows a clear blog structure with TOC, FAQs, and Conclusion. "
                             "Your tone is friendly, casual, and conversational — written for 5th-grade readers. "
                             "Avoid robotic, generic, or overly formal writing."
                         )
